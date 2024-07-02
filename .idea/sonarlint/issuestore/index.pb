@@ -23,3 +23,11 @@ t
 Dsrc/main/java/study/spring_data_jpa/repository/MemberRepository.java,5/3/53fed529c488807073c1f42c85f5b8f109a57c8c
 x
 Hsrc/test/java/study/spring_data_jpa/repository/MemberRepositoryTest.java,a/5/a54f1343fcc17ac0329584378dfe78b555f1ef77
+d
+4src/main/java/study/spring_data_jpa/entity/Team.java,8/1/8194f9593017f083ec8bcfae116301dcae03e977
+j
+:src/test/java/study/spring_data_jpa/entity/MemberTest.java,a/6/a6c28af132c502a9b15f12b2e7bd3d78754b3f7c
+r
+Bsrc/main/java/study/spring_data_jpa/repository/TeamRepository.java,9/a/9a1c171d7ae297f0084491a29af2b63246e2faa9
+u
+Esrc/main/java/study/spring_data_jpa/repository/TeamJpaRepository.java,3/6/3652cd93fd85c1b01d01b85b661f800491b4144d

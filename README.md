@@ -7,7 +7,7 @@
 ---
 ### 20240702
 1) Member, Team 엔티티 객체 생성 및 양방향 연간관계 설정
->> Member -> Team N:1 연관관계 매핑
+> Member -> Team N:1 연관관계 매핑
 2) 엔티티 테스트 코드 작성 (순수 jpa)
 3) 순수 JPA기반 리포짓토리 작성 (Member, Team) entity
 4) 순수 JPA 리포짓토리 -> spring Date JPA 리포짓토리로 변경

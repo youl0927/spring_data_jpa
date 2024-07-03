@@ -31,3 +31,5 @@ r
 Bsrc/main/java/study/spring_data_jpa/repository/TeamRepository.java,9/a/9a1c171d7ae297f0084491a29af2b63246e2faa9
 u
 Esrc/main/java/study/spring_data_jpa/repository/TeamJpaRepository.java,3/6/3652cd93fd85c1b01d01b85b661f800491b4144d
+f
+6src/main/java/study/spring_data_jpa/dto/MemberDto.java,5/2/52e50d98d9bee653c609555c3013e98769496e7f

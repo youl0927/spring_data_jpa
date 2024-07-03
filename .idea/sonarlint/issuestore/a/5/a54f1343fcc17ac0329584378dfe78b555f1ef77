@@ -1,9 +1,39 @@
 
+u
+java:S2699t"-Add at least one assertion to this test case.(Ûã…¾úÿÿÿÿ8Ò‘áÅ‡2J$611e3570-65d4-4283-a048-da8e38e31694
+q
+java:S2699"-Add at least one assertion to this test case.(üâôÏ8Ó‘áÅ‡2J$84b47d5e-c318-4ae3-ad28-03a399062f80
+v
+java:S2699"-Add at least one assertion to this test case.(ñ±ïŠûÿÿÿÿ8Ó‘áÅ‡2J$eca16539-ecad-42c3-ada7-1292394894d6
+p
+java:S2699œ"-Add at least one assertion to this test case.(ƒòğ8Ó‘áÅ‡2J$f7e1a1f0-0f99-4733-857f-2017810caaa0
 f
-java:S5786"Remove this 'public' modifier.(ªÉ¥•ûÿÿÿÿ8£ ƒœ‡2J$fc67111f-a060-48ec-8b10-104e01beafab
+java:S5786#"Remove this 'public' modifier.(ªÉ¥•ûÿÿÿÿ8Ô‘áÅ‡2J$c9c5b909-a0a4-4bd4-ae36-b64c02d3a056
 f
-java:S5786&"Remove this 'public' modifier.(«†îØúÿÿÿÿ8£ ƒœ‡2J$2f4bc154-970d-4bac-b76f-fbaafaf192a6
+java:S5786/"Remove this 'public' modifier.(«†îØúÿÿÿÿ8Ô‘áÅ‡2J$9511de26-fc43-4a37-9819-c95c3eb47d75
+a
+java:S5786O"Remove this 'public' modifier.(ŸœäŠ8Ô‘áÅ‡2J$e5380bfb-7343-4c8e-af7e-3643b8dc0b27
+f
+java:S5786]"Remove this 'public' modifier.(Î†áşÿÿÿÿ8Ô‘áÅ‡2J$122e9e22-9f5f-41f4-afa7-0e98a6f6ada2
+f
+java:S5786i"Remove this 'public' modifier.(¢‚æøÿÿÿÿ8Ô‘áÅ‡2J$564a88db-b022-48ff-b8da-094554731771
+f
+java:S5786t"Remove this 'public' modifier.(Ûã…¾úÿÿÿÿ8Ô‘áÅ‡2J$25c1bc65-fe38-48a3-8456-dee2c7bfc26a
+b
+java:S5786"Remove this 'public' modifier.(üâôÏ8Ô‘áÅ‡2J$20cdf387-6723-486f-b5ea-7620a68b8b56
+g
+java:S5786"Remove this 'public' modifier.(ñ±ïŠûÿÿÿÿ8Ô‘áÅ‡2J$a6a5b24e-b336-4693-978b-fb83a8515eb1
+a
+java:S5786œ"Remove this 'public' modifier.(ƒòğ8Ô‘áÅ‡2J$4f54aec4-1b0d-4e54-a456-fe05e96ebc62
+g
+java:S5786©"Remove this 'public' modifier.(­ÍÎäıÿÿÿÿ8Ô‘áÅ‡2J$1d97e242-58c0-4e4b-b0ee-58c374febbeb
 y
-java:S58387"1Use assertThat(actual).hasSize(expected) instead.(õãİ©ùÿÿÿÿ8§ ƒœ‡2J$cdedcea5-6645-469f-8af8-f5e1da3ad3b9
+java:S5838@"1Use assertThat(actual).hasSize(expected) instead.(õãİ©ùÿÿÿÿ8×‘áÅ‡2J$0a32b47b-0ff9-4561-bf3a-2e87b88a2281
 X
-java:S5838B"Use isZero() instead.(À¾Ãæ8„ºƒœ‡2J$475c9d11-84eb-4fcd-81d3-a370547defba
+java:S5838K"Use isZero() instead.(À¾Ãæ8×‘áÅ‡2J$249ec664-adef-4d26-a71f-269785f598d4
+y
+java:S5838Y"1Use assertThat(actual).hasSize(expected) instead.(ï‹øøøÿÿÿÿ8×‘áÅ‡2J$7448e925-3e7a-468f-ae7e-9d27d4e6c753
+z
+java:S5838Â"1Use assertThat(actual).hasSize(expected) instead.(¼ù™Íûÿÿÿÿ8Ù‘áÅ‡2J$86aa74b6-cb24-4aa1-9794-707cc3954c48
+Y
+java:S5838Ä"Use isZero() instead.(¹õ½ú8Ù‘áÅ‡2J$42596df8-37d6-4f2e-a419-dc94e9fe7eb9

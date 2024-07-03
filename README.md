@@ -11,3 +11,15 @@
 - 엔티티 테스트 코드 작성 (순수 jpa)
 - 순수 JPA기반 리포짓토리 작성 (Member, Team) entity
 - 순수 JPA 리포짓토리 -> spring Date JPA 리포짓토리로 변경
+---
+### 20240703
+- 스프링 데이터 JPA에서 지원하는 쿼리 메소드 적용 (findBy ...등등)
+- JPA NamedQuery 적용 -> 실무에서는 활용력 X
+- 리포지토리에 쿼리 메소드 직접 정의
+   - Query 어노테이션을 활용하여 정의
+```
+@Query("select m from Member m where m.username= :username and m.age = :age")
+ List<Member> findUser(@Param("username") String username, @Param("age") int
+ age);
+```
+- 단순히 값 하나를 조회하는 방법

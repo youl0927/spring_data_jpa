@@ -23,3 +23,6 @@
  age);
 ```
 - 단순히 값 하나를 조회하는 방법
+₩₩₩
+@Query("select m.username from Member m")
+ List<String> findUsernameList();

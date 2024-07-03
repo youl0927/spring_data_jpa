@@ -19,8 +19,7 @@
    - Query 어노테이션을 활용하여 정의
 ```
 @Query("select m from Member m where m.username= :username and m.age = :age")
- List<Member> findUser(@Param("username") String username, @Param("age") int
- age);
+ List<Member> findUser(@Param("username") String username, @Param("age") int age);
 ```
 - 단순히 값 하나를 조회하는 방법
 ```

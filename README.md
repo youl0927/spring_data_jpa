@@ -65,7 +65,7 @@ public long totalCount(int age) {
 
 @Test
  public void paging() throws Exception {
-//given
+      //given
      memberJpaRepository.save(new Member("member1", 10));
      memberJpaRepository.save(new Member("member2", 10));
      memberJpaRepository.save(new Member("member3", 10));
@@ -74,13 +74,15 @@ public long totalCount(int age) {
      int age = 10;
      int offset = 0;
      int limit = 3;
-//when
+
+      //when
      List<Member> members = memberJpaRepository.findByPage(age, offset, limit);
      long totalCount = memberJpaRepository.totalCount(age);
-//페이지 계산 공식 적용...
-// totalPage = totalCount / size ... // 마지막 페이지 ...
-// 최초 페이지 ..
-//then
+      //페이지 계산 공식 적용...
+      // totalPage = totalCount / size ... // 마지막 페이지 ...
+      // 최초 페이지 ..
+
+      //then
      assertThat(members.size()).isEqualTo(3);
      assertThat(totalCount).isEqualTo(5);
  }
@@ -96,23 +98,24 @@ public interface MemberRepository extends Repository<Member, Long> {
 
 @Test
 public void page() throws Exception {
-//given
+      //given
      memberRepository.save(new Member("member1", 10));
      memberRepository.save(new Member("member2", 10));
      memberRepository.save(new Member("member3", 10));
      memberRepository.save(new Member("member4", 10));
      memberRepository.save(new Member("member5", 10));
-//when
+
+      //when
     PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC,"username"));
     Page<Member> page = memberRepository.findByAge(10, pageRequest);
-//then
-List<Member> content = page.getContent(); //조회된 데이터 assertThat(content.size()).isEqualTo(3); //조회된 데이터 수 assertThat(page.getTotalElements()).isEqualTo(5); //전체 데이터 수 assertThat(page.getNumber()).isEqualTo(0); //페이지 번호 assertThat(page.getTotalPages()).isEqualTo(2); //전체 페이지 번호 assertThat(page.isFirst()).isTrue(); //첫번째 항목인가? assertThat(page.hasNext()).isTrue(); //다음 페이지가 있는가?
+
+      //then
+   List<Member> content = page.getContent(); //조회된 데이터 assertThat(content.size()).isEqualTo(3); //조회된 데이터 수 assertThat(page.getTotalElements()).isEqualTo(5); //전체 데이터 수 assertThat(page.getNumber()).isEqualTo(0); //페이지 번호 assertThat(page.getTotalPages()).isEqualTo(2); //전체 페이지 번호 assertThat(page.isFirst()).isTrue(); //첫번째 항목인가?           assertThat(page.hasNext()).isTrue(); //다음 페이지가 있는가?
 }
 ```
 - Page객체에 count 쿼리가 포함이 되어있지만, 여러 테이블을 조인하게 되어있다면 totalCount 쿼리를 분리해서 사용하는게 좋을수도 있음
 ```
- @Query(value = "select m from Member m",
-        countQuery = "select count(m.username) from Member m")
+ @Query(value = "select m from Member m", countQuery = "select count(m.username) from Member m")
 Page<Member> findMemberAllCountBy(Pageable pageable);
 ```
 - JPA에서 엔티티를 그대로 return 시키는 것은 매우매우 위험함!! 때문에 DTO로 변환해서 return 해줘야됨

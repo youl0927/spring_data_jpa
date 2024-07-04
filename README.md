@@ -110,7 +110,13 @@ public void page() throws Exception {
     Page<Member> page = memberRepository.findByAge(10, pageRequest);
 
       //then
-   List<Member> content = page.getContent(); //조회된 데이터 assertThat(content.size()).isEqualTo(3); //조회된 데이터 수 assertThat(page.getTotalElements()).isEqualTo(5); //전체 데이터 수 assertThat(page.getNumber()).isEqualTo(0); //페이지 번호 assertThat(page.getTotalPages()).isEqualTo(2); //전체 페이지 번호 assertThat(page.isFirst()).isTrue(); //첫번째 항목인가?           assertThat(page.hasNext()).isTrue(); //다음 페이지가 있는가?
+   List<Member> content = page.getContent(); //조회된 데이터
+   assertThat(content.size()).isEqualTo(3); //조회된 데이터 수
+   assertThat(page.getTotalElements()).isEqualTo(5); //전체 데이터 수
+   assertThat(page.getNumber()).isEqualTo(0); //페이지 번호
+   assertThat(page.getTotalPages()).isEqualTo(2); //전체 페이지 번호
+   assertThat(page.isFirst()).isTrue(); //첫번째 항목인가?
+   assertThat(page.hasNext()).isTrue(); //다음 페이지가 있는가?
 }
 ```
 - Page객체에 count 쿼리가 포함이 되어있지만, 여러 테이블을 조인하게 되어있다면 totalCount 쿼리를 분리해서 사용하는게 좋을수도 있음

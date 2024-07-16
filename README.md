@@ -133,7 +133,7 @@ OR
 
 Page<MemberDto> toMap = page.map(m-> new MemberDto(m.getId(), m.getUsername(), null));
 ```
-
+---
 ### 20240716
 - 벌크성 쿼리 추가(한번여 여러 테이블 업데이트 하기)
 ```

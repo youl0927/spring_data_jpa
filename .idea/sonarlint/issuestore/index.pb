@@ -11,8 +11,6 @@ v
 Fsrc/test/java/study/spring_data_jpa/SpringDataJpaApplicationTests.java,9/9/991dab13e24f0e6db7119738402dda94682e378b
 7
 gradlew,5/b/5bbfa66edb4db3c7c33c5181f43510990d3307f9
-_
-/src/main/java/study/spring_data_jpa/Member.java,3/5/357d9687ec07ec5e1d6754552aaa5e16ba3640b8
 f
 6src/main/java/study/spring_data_jpa/entity/Member.java,8/7/87cd2fcee39df9e705e7bb85443af63f98ea8e41
 w

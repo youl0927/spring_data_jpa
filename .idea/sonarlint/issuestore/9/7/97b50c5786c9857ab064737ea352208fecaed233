@@ -1,15 +1,17 @@
 
 f
-java:S5786"Remove this 'public' modifier.(ªÉ¥•ûÿÿÿÿ8ĞÈÄ‡2J$c0dae862-6dda-459c-afa8-93a1e1ddc330
+java:S5786"Remove this 'public' modifier.(ªÉ¥•ûÿÿÿÿ8–ÖãÚ‹2J$3d6c9ac2-6e2d-4111-90ac-21b98f0df90b
 f
-java:S5786'"Remove this 'public' modifier.(«†îØúÿÿÿÿ8ÑÈÄ‡2J$ffebde6a-7da0-4be2-ae86-7b055243119a
+java:S5786'"Remove this 'public' modifier.(«†îØúÿÿÿÿ8–ÖãÚ‹2J$67db3a08-9ae3-4222-9b17-9786ff6d3d68
 a
-java:S5786H"Remove this 'public' modifier.(ŸœäŠ8ÑÈÄ‡2J$d7024afa-0f97-4c0e-ad4f-a4f288c2408e
+java:S5786H"Remove this 'public' modifier.(ŸœäŠ8–ÖãÚ‹2J$76fbc52f-3091-4ea0-9651-4379e03b5e2c
 f
-java:S5786V"Remove this 'public' modifier.(Î†áşÿÿÿÿ8ÑÈÄ‡2J$bc430676-c510-4456-8b66-b89c1fa5080c
+java:S5786V"Remove this 'public' modifier.(Î†áşÿÿÿÿ8–ÖãÚ‹2J$59f5fcad-ad34-4da9-9739-eacd8c050aff
 f
-java:S5786b"Remove this 'public' modifier.(­ÍÎäıÿÿÿÿ8ÑÈÄ‡2J$1fb89bdb-8b16-4f0e-ae2d-d5ec48186f2c
+java:S5786b"Remove this 'public' modifier.(­ÍÎäıÿÿÿÿ8–ÖãÚ‹2J$c215f1ad-0297-49a7-b0bf-79ecb8cf6001
+f
+java:S5786}"Remove this 'public' modifier.(’¯Ã¦ÿÿÿÿÿ8–ÖãÚ‹2J$db3029cb-79ff-43ca-b9b4-780079a4196f
 y
-java:S5838R"1Use assertThat(actual).hasSize(expected) instead.(ï‹øøøÿÿÿÿ8ÒÈÄ‡2J$c431be49-f4a2-4aab-ae87-590b1b877c82
+java:S5838R"1Use assertThat(actual).hasSize(expected) instead.(ï‹øøøÿÿÿÿ8˜ÖãÚ‹2J$5fc45fea-bb1f-46a1-8a60-5052045affc9
 y
-java:S5838x"1Use assertThat(actual).hasSize(expected) instead.(©÷ÿúùÿÿÿÿ8ÓÈÄ‡2J$38170b26-12c8-4b05-b67b-837dea307192
+java:S5838x"1Use assertThat(actual).hasSize(expected) instead.(©÷ÿúùÿÿÿÿ8˜ÖãÚ‹2J$ab7f9fa5-0959-451e-bc38-e8d04d0eec3e

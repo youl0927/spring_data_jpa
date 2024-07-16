@@ -1,5 +1,7 @@
 package study.spring_data_jpa.repository;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,9 @@ class MemberRepositoryTest {
 
     @Autowired
     TeamRepository teamRepository;
+
+    @PersistenceContext
+    EntityManager em;
 
     @Test
     public void testMember(){
@@ -197,6 +202,61 @@ class MemberRepositoryTest {
         assertThat(page.getTotalPages()).isEqualTo(2);
         assertThat(page.isFirst()).isTrue();
         assertThat(page.hasNext()).isTrue();
+    }
 
+    @Test
+    public void bulkUpdate(){
+        //give
+        memberRepository.save(new Member("member1", 10));
+        memberRepository.save(new Member("member2", 19));
+        memberRepository.save(new Member("member3", 20));
+        memberRepository.save(new Member("member4", 21));
+        memberRepository.save(new Member("member5", 40));
+        memberRepository.save(new Member("member6", 12));
+
+        //when
+        int resultCount = memberRepository.bulkAgePlus(20);
+        //영속성 컨텍스트로 인하여 플레쉬 및 클리어를 해줘야됨. 이미 가져온 데이터는 1차 캐시에서 듥고 있기 때문에
+        // 출력되는 데이터랑 디비의 저장되있는 데이터랑 다를수 있음
+//        em.flush();
+//        em.clear();
+
+        List<Member> result = memberRepository.findByUsername("member5");
+        Member member5 = result.get(0);
+        System.out.println("member5= " + member5);
+
+        //then
+        assertThat(resultCount).isEqualTo(3);
+
+    }
+
+    @Test
+    public void findMemberLazy(){
+        //given
+        //member1 -> teamA
+        //member2 -> teamB
+
+        Team teamA = new Team("teamA");
+        Team teamB = new Team("teamB");
+        teamRepository.save(teamA);
+        teamRepository.save(teamB);
+
+        Member member1 = new Member("member1", 10, teamA);
+        Member member2 = new Member("member2", 10, teamB);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+
+        em.flush();
+        em.clear();
+
+        //when N + 1
+        //select Member 1
+        List<Member> members = memberRepository.findEntityGraphByUsername("member1");
+
+        for (Member member : members){
+            System.out.println("member = " + member.getUsername());
+            System.out.println("member.teamClass = " + member.getTeam().getClass());
+            System.out.println("member.team = " + member.getTeam().getName());
+        }
     }
 }

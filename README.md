@@ -133,3 +133,115 @@ OR
 
 Page<MemberDto> toMap = page.map(m-> new MemberDto(m.getId(), m.getUsername(), null));
 ```
+
+###20240716
+- 벌크성 쿼리 추가(한번여 여러 테이블 업데이트 하기)
+```
+    public int bulkAgePlus(int age) {
+
+        return em.createQuery("update Member m set m.age = m.age + 1 where m.age >= :age")
+                .setParameter("age", age)
+                .executeUpdate();
+    }
+```
+
+- 스프링 데이터 JPA에서 벌크성 수정 쿼리 추가
+  - @Modifying 어노테이션을 꼭 추가 해줘야 됨
+```
+@Modifying
+ @Query("update Member m set m.age = m.age + 1 where m.age >= :age")
+int bulkAgePlus(@Param("age") int age);
+```
+
+- 참고로 영속성 컨텍스트로 인하여 업데이트를 하고 다시 특정 데이터를 불러오면, update가 안되는 현상이 있음. 그때 강제로 엔티티 메니저를 활용해서 flush랑 clear를 해줘야됨
+```
+    @Test
+    public void bulkUpdate(){
+        //give
+        memberRepository.save(new Member("member1", 10));
+        memberRepository.save(new Member("member2", 19));
+        memberRepository.save(new Member("member3", 20));
+        memberRepository.save(new Member("member4", 21));
+        memberRepository.save(new Member("member5", 40));
+        memberRepository.save(new Member("member6", 12));
+
+        //when
+        int resultCount = memberRepository.bulkAgePlus(20);
+        //영속성 컨텍스트로 인하여 플레쉬 및 클리어를 해줘야됨. 이미 가져온 데이터는 1차 캐시에서 듥고 있기 때문에
+        // 출력되는 데이터랑 디비의 저장되있는 데이터랑 다를수 있음
+          em.flush();
+          em.clear();
+
+        List<Member> result = memberRepository.findByUsername("member5");
+        Member member5 = result.get(0);
+        System.out.println("member5= " + member5);
+
+        //then
+        assertThat(resultCount).isEqualTo(3);
+
+    }
+```
+
+- 만약 저런식으로 강제로 엔티티 메니저를 활용하기 귀찮다면 @Modifying 어노테이션이 클리어오토메티컬리 값을 true로 변경해주면 됨
+```
+    @Modifying(clearAutomatically = true)          //변경 한다고 알려주는 어노테이션,  일걸 빼면 에러가 남 , clearAutomatically를 해주면 따로 플레시랑 클리어를 안해줘도 됨
+    @Query("update Member m set m.age = m.age + 1 where m.age >= :age")
+    int bulkAgePlus(@Param("age") int age); 
+```
+
+- @EntityGraph 어노테이션이란  연관된 엔티티들을 한번에 조회하는 방법을 뜻함
+```
+ @Test
+ public void findMemberLazy() throws Exception {
+     //given
+     //member1 -> teamA
+     //member2 -> teamB
+     Team teamA = new Team("teamA");
+     Team teamB = new Team("teamB");
+     teamRepository.save(teamA);
+     teamRepository.save(teamB);
+     memberRepository.save(new Member("member1", 10, teamA));
+     memberRepository.save(new Member("member2", 20, teamB));
+     em.flush();
+     em.clear();   
+   //when
+     List<Member> members = memberRepository.findAll();
+   //then
+     for (Member member : members) {
+         member.getTeam().getName();
+} }
+```
+ - 위에 코드를 분석해보면 마지막 for문을 돌때 쿼리가 한번 더 실행되는 것을 확인 할 수 있음, 그 이유가 연관관계를 Lazy로 했기 때문임
+
+- 만약 이것을 한번에 조회하려면 Fetch join을 활용하면 됨
+```
+    @Query("select m from Member m left join fetch m.team")
+    List<Member> findMemberFetchJoin();
+```
+
+- 하지만 jpa에서 표준스팩으로 도 있는 eintityGraph를 활용하면 좀더 간편하게 사용 가능
+  - 첫번째는 일단 findAll은 기본 jpa에서 제공해주는 인터페이스인데, 이걸 오버라이드 해서 엔티티 그래프 어노테이션 추가해주면 됨
+  - JPQL을 활용한 entityGraph인데, 첫번째와 성능은 똑같음
+  - 세번째는 메서드 네임트쿼리를 활용할 수 있음
+```
+    @Override
+    @EntityGraph(attributePaths = {"team"})         //이걸 쓰면 그냥 fetch join 되는거라고 생각하면 됨
+    List<Member> findAll();
+
+    @EntityGraph(attributePaths = {"team"})
+    @Query("select m from Member m")            //이렇게 해도 똑같음
+    List<Member> findMemberEntityGraph();
+
+    //@EntityGraph(attributePaths = ("team"))
+    @EntityGraph("Member.all")          //이렇게 하면 엔티에 네임드쿼리를 활용해서 할 수 있음
+    List<Member> findEntityGraphByUsername(@Param("username") String username);
+```
+
+- NamedEntityGraph를 활용하는 방법이 있음, 엔티티에 님임드 어트리뷰트 노트  어노테이션을 먼저 추가 한 후, 인터페이스에서 활용하면 됨
+```
+@NamedEntityGraph(name = "Member.all", attributeNodes = @NamedAttributeNode("team"))
+public class Member {
+
+ @EntityGraph("Member.all")          //이렇게 하면 엔티에 네임드쿼리를 활용해서 할 수 있음
+ List<Member> findEntityGraphByUsername(@Param("username") String username);
+```  

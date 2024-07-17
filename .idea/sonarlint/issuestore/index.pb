@@ -31,3 +31,17 @@ u
 Esrc/main/java/study/spring_data_jpa/repository/TeamJpaRepository.java,3/6/3652cd93fd85c1b01d01b85b661f800491b4144d
 f
 6src/main/java/study/spring_data_jpa/dto/MemberDto.java,5/2/52e50d98d9bee653c609555c3013e98769496e7f
+z
+Jsrc/main/java/study/spring_data_jpa/repository/MemberRepositoryCustom.java,c/c/cccf71a6fcbb3cec9946eda2abd77ba6805b0027
+x
+Hsrc/main/java/study/spring_data_jpa/repository/MemberRepositoryImpl.java,c/6/c6de15ecff9bd3dc378cfd1ca9017cfa3bfc19bc
+y
+Isrc/main/java/study/spring_data_jpa/repository/MemberQueryRepository.java,d/3/d304c2e589cada4fa372e81de75f559cc70c7bf8
+m
+=src/main/java/study/spring_data_jpa/entity/JpaBaseEntity.java,4/a/4aa4843566247ed62a8eade3d7afdeeb7fe8f084
+j
+:src/main/java/study/spring_data_jpa/entity/BaseEntity.java,6/b/6be7482215d24ecb7ce7be3d20b87e677bcb6778
+n
+>src/main/java/study/spring_data_jpa/entity/BaseTimeEntity.java,9/4/94952b958ed3bb0a8fb8e716b9729fd55ae28554
+t
+Dsrc/main/java/study/spring_data_jpa/controller/MemberController.java,2/c/2cb175d3221bb9f8ece5b3c35711cb3f8993baf0

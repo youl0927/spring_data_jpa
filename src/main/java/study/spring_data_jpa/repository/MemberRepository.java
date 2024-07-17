@@ -1,11 +1,10 @@
 package study.spring_data_jpa.repository;
 
+import jakarta.persistence.LockModeType;
+import jakarta.persistence.QueryHint;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import study.spring_data_jpa.dto.MemberDto;
 import study.spring_data_jpa.entity.Member;
@@ -14,7 +13,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-public interface MemberRepository extends JpaRepository<Member, Long> {         //shift+option+T 테스트 생성
+public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom {         //shift+option+T 테스트 생성
 
     List<Member> findByUsernameAndAgeGreaterThan(String username, int age);
 
@@ -60,4 +59,10 @@ public interface MemberRepository extends JpaRepository<Member, Long> {         
     //@EntityGraph(attributePaths = ("team"))
     @EntityGraph("Member.all")          //이렇게 하면 엔티에 네임드쿼리를 활용해서 할 수 있음
     List<Member> findEntityGraphByUsername(@Param("username") String username);
+
+    @QueryHints(value = @QueryHint(name = "org.hibernate.readOnly", value = "true"))        //변경감지 체크X
+    Member findReadOnlyByUsername(String username);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    List<Member> findLockByUsername(String username);
 }

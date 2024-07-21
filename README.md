@@ -133,3 +133,377 @@ OR
 
 Page<MemberDto> toMap = page.map(m-> new MemberDto(m.getId(), m.getUsername(), null));
 ```
+---
+### 20240716
+- 벌크성 쿼리 추가(한번여 여러 테이블 업데이트 하기)
+```
+    public int bulkAgePlus(int age) {
+
+        return em.createQuery("update Member m set m.age = m.age + 1 where m.age >= :age")
+                .setParameter("age", age)
+                .executeUpdate();
+    }
+```
+
+- 스프링 데이터 JPA에서 벌크성 수정 쿼리 추가
+  - @Modifying 어노테이션을 꼭 추가 해줘야 됨
+```
+@Modifying
+ @Query("update Member m set m.age = m.age + 1 where m.age >= :age")
+int bulkAgePlus(@Param("age") int age);
+```
+
+- 참고로 영속성 컨텍스트로 인하여 업데이트를 하고 다시 특정 데이터를 불러오면, update가 안되는 현상이 있음. 그때 강제로 엔티티 메니저를 활용해서 flush랑 clear를 해줘야됨
+```
+    @Test
+    public void bulkUpdate(){
+        //give
+        memberRepository.save(new Member("member1", 10));
+        memberRepository.save(new Member("member2", 19));
+        memberRepository.save(new Member("member3", 20));
+        memberRepository.save(new Member("member4", 21));
+        memberRepository.save(new Member("member5", 40));
+        memberRepository.save(new Member("member6", 12));
+
+        //when
+        int resultCount = memberRepository.bulkAgePlus(20);
+        //영속성 컨텍스트로 인하여 플레쉬 및 클리어를 해줘야됨. 이미 가져온 데이터는 1차 캐시에서 듥고 있기 때문에
+        // 출력되는 데이터랑 디비의 저장되있는 데이터랑 다를수 있음
+          em.flush();
+          em.clear();
+
+        List<Member> result = memberRepository.findByUsername("member5");
+        Member member5 = result.get(0);
+        System.out.println("member5= " + member5);
+
+        //then
+        assertThat(resultCount).isEqualTo(3);
+
+    }
+```
+
+- 만약 저런식으로 강제로 엔티티 메니저를 활용하기 귀찮다면 @Modifying 어노테이션이 클리어오토메티컬리 값을 true로 변경해주면 됨
+```
+    @Modifying(clearAutomatically = true)          //변경 한다고 알려주는 어노테이션,  일걸 빼면 에러가 남 , clearAutomatically를 해주면 따로 플레시랑 클리어를 안해줘도 됨
+    @Query("update Member m set m.age = m.age + 1 where m.age >= :age")
+    int bulkAgePlus(@Param("age") int age); 
+```
+
+- @EntityGraph 어노테이션이란  연관된 엔티티들을 한번에 조회하는 방법을 뜻함
+```
+ @Test
+ public void findMemberLazy() throws Exception {
+     //given
+     //member1 -> teamA
+     //member2 -> teamB
+     Team teamA = new Team("teamA");
+     Team teamB = new Team("teamB");
+     teamRepository.save(teamA);
+     teamRepository.save(teamB);
+     memberRepository.save(new Member("member1", 10, teamA));
+     memberRepository.save(new Member("member2", 20, teamB));
+     em.flush();
+     em.clear();   
+   //when
+     List<Member> members = memberRepository.findAll();
+   //then
+     for (Member member : members) {
+         member.getTeam().getName();
+} }
+```
+ - 위에 코드를 분석해보면 마지막 for문을 돌때 쿼리가 한번 더 실행되는 것을 확인 할 수 있음, 그 이유가 연관관계를 Lazy로 했기 때문임
+
+- 만약 이것을 한번에 조회하려면 Fetch join을 활용하면 됨
+```
+    @Query("select m from Member m left join fetch m.team")
+    List<Member> findMemberFetchJoin();
+```
+
+- 하지만 jpa에서 표준스팩으로 도 있는 eintityGraph를 활용하면 좀더 간편하게 사용 가능
+  - 첫번째는 일단 findAll은 기본 jpa에서 제공해주는 인터페이스인데, 이걸 오버라이드 해서 엔티티 그래프 어노테이션 추가해주면 됨
+  - JPQL을 활용한 entityGraph인데, 첫번째와 성능은 똑같음
+  - 세번째는 메서드 네임트쿼리를 활용할 수 있음
+```
+    @Override
+    @EntityGraph(attributePaths = {"team"})         //이걸 쓰면 그냥 fetch join 되는거라고 생각하면 됨
+    List<Member> findAll();
+
+    @EntityGraph(attributePaths = {"team"})
+    @Query("select m from Member m")            //이렇게 해도 똑같음
+    List<Member> findMemberEntityGraph();
+
+    //@EntityGraph(attributePaths = ("team"))
+    @EntityGraph("Member.all")          //이렇게 하면 엔티에 네임드쿼리를 활용해서 할 수 있음
+    List<Member> findEntityGraphByUsername(@Param("username") String username);
+```
+
+- NamedEntityGraph를 활용하는 방법이 있음, 엔티티에 님임드 어트리뷰트 노트  어노테이션을 먼저 추가 한 후, 인터페이스에서 활용하면 됨
+```
+@NamedEntityGraph(name = "Member.all", attributeNodes = @NamedAttributeNode("team"))
+public class Member {
+
+ @EntityGraph("Member.all")          //이렇게 하면 엔티에 네임드쿼리를 활용해서 할 수 있음
+ List<Member> findEntityGraphByUsername(@Param("username") String username);
+```  
+---
+### 20240718
+- JPA Hint
+```
+@QueryHints(value = @QueryHint(name = "org.hibernate.readOnly", value = "true"))
+Member findReadOnlyByUsername(String username);
+```
+   -쿼리 힌트 사용 확인
+```
+```java
+@Test
+public void queryHint() throws Exception {
+//given
+memberRepository.save(new Member("member1", 10));
+em.flush();
+em.clear();
+//when
+Member member = memberRepository.findReadOnlyByUsername("member1");
+member.setUsername("member2");
+em.flush(); //Update Query 실행X
+}
+```
+- 쿼리 힌트에 Page 추가 예제
+```
+@QueryHints(value = { @QueryHint(name = "org.hibernate.readOnly", value = "true")}, forCounting = true)
+Page<Member> findByUsername(String name, Pageable pageable);
+```
+---
+- 사용자 정의 인터페이스 구현 클래스
+   - 기본적으로 제공하는 JPA 가 아닌, 사용자가 커스텀해서 사용할수 있는 인터페이스
+   - 먼저 기본적인 interface를 작성해 준다.
+```
+public interface MemberRepositoryCustom {
+List<Member> findMemberCustom();
+}
+```
+   - 그다음에 이 인터페이스를 상속해줄 구현클래스를 작성한다
+```
+@RequiredArgsConstructor
+public class MemberRepositoryImpl implements MemberRepositoryCustom {
+   private final EntityManager em;
+   @Override
+   public List<Member> findMemberCustom() {
+      return em.createQuery("select m from Member m")
+                  .getResultList();
+   }
+}
+
+OR
+
+@RequiredArgsConstructor
+public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
+   private final EntityManager em;
+   @Override
+   public List<Member> findMemberCustom() {
+      return em.createQuery("select m from Member m")
+               .getResultList();
+   }
+}
+```
+   - 그 다음에 사용자 정의 인터페이스에 상속해주면 된다
+```
+   public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom {
+   }
+```
+   - 정리하면 MemberRepository(interface) -> MemberRepositoryCustom(interface) <- MemberRepositoryImpl(class), MemberRepositoryCustomImp(Class) : 두개다 가
+   - 꼭 JPA에서 제공하는 인터페이스에서 Impl를 붙여줘야 됨, 규칙임!!!!!!!!!!
+   - 그 다음에 상위 인터페이스에서 호출해주면 됨
+```
+List<Member> result = memberRepository.findMemberCustom();
+```
+
+- Auditing : 실무에서 각 테이블, 엔티티에는 기본적으로 등록일 수정일 등록자, 수정자 이런 컬럼이 들어가는 경우가 많다.
+   - 먼저 순수 JPA 사용할 경우
+```
+@MappedSuperclass
+@Getter
+public class JpaBaseEntity {
+
+   @Column(updatable = false)
+   private LocalDateTime createdDate;
+   private LocalDateTime updatedDate;
+
+   @PrePersist
+   public void prePersist() {
+   LocalDateTime now = LocalDateTime.now();
+   createdDate = now;
+   updatedDate = now;
+   }
+
+   @PreUpdate
+   public void preUpdate() {
+   updatedDate = LocalDateTime.now();
+   }
+}
+```
+   - 중요한 어노테이션이 @PrePersist, @PostPersist, @PreUpdate, @PostUpdate
+   - 그 다음에는 엔티티에서 상속을 해준다
+```
+public class Member extends JpaBaseEntity {}
+```
+
+   - 테스트 코드
+```
+@Test
+public void jpaEventBaseEntity() throws Exception {
+   //given
+   Member member = new Member("member1");
+   memberRepository.save(member); //@PrePersist
+   Thread.sleep(100);
+   member.setUsername("member2");
+   em.flush(); //@PreUpdate
+   em.clear();
+   //when
+   Member findMember = memberRepository.findById(member.getId()).get();
+   //then
+   System.out.println("findMember.createdDate = " + findMember.getCreatedDate());
+   System.out.println("findMember.updatedDate = " + findMember.getUpdatedDate());
+}
+```
+
+   - 순수 JPA가 아닌 Spring date jpa를 활용
+   - 먼저 스프링 부트 클래스, 엔티에 어노테이션을 설정 해줘야됨
+      - @EnableJpaAuditing -> 클래스, @EntityListeners(AuditingEntityListener.class) -> 엔티티
+```
+@EnableJpaAuditing         //이 어노테이션을 곡 써줘야됨
+@SpringBootApplication
+public class DataJpaApplication {
+
+   public static void main(String[] args) {
+      SpringApplication.run(DataJpaApplication.class, args);
+   }
+
+   @Bean            //이건 임시 UUID이고 실제로는 유저 ID가 들어갈듯
+   public AuditorAware<String> auditorProvider() {
+      return () -> Optional.of(UUID.randomUUID().toString());
+   }
+}
+```
+   - 먼저 등록일, 수정일 적용
+```
+package study.datajpa.entity;
+@EntityListeners(AuditingEntityListener.class)
+@MappedSuperclass
+@Getter
+public class BaseEntity {
+
+   @CreatedDate
+   @Column(updatable = false)
+   private LocalDateTime createdDate;
+
+   @LastModifiedDate
+   private LocalDateTime lastModifiedDate;
+}
+```
+   - 등록자, 수정자 적용
+```
+@EntityListeners(AuditingEntityListener.class)
+@MappedSuperclass
+public class BaseEntity {
+   @CreatedDate
+   @Column(updatable = false)
+   private LocalDateTime createdDate;
+
+   @LastModifiedDate
+   private LocalDateTime lastModifiedDate;
+
+   @CreatedBy
+   @Column(updatable = false)
+   private String createdBy;
+
+   @LastModifiedBy
+   private String lastModifiedBy;
+}
+```
+
+   - 참고로 실무에서는 엔티티 수정 시간만 있고, 수정자는 없을 수도 있으니, 분리하는 것이 좋을 수도 있음
+```
+public class BaseTimeEntity {
+   @CreatedDate
+   @Column(updatable = false)
+   private LocalDateTime createdDate;
+
+   @LastModifiedDate
+   private LocalDateTime lastModifiedDate;
+}
+
+public class BaseEntity extends BaseTimeEntity {
+   @CreatedBy
+   @Column(updatable = false)
+   private String createdBy;
+
+   @LastModifiedBy
+   private String lastModifiedBy;
+}
+```
+
+- Web 확장 도메인 클래스 컨버터
+     - 네트워크 상에서 Id 값 같은 키값으로 통신 하는것이 보안 적으로 위험할수 있음
+```
+사용전
+@RestController
+@RequiredArgsConstructor
+public class MemberController {
+   private final MemberRepository memberRepository;
+
+   @GetMapping("/members/{id}")
+   public String findMember(@PathVariable("id") Long id) {
+   Member member = memberRepository.findById(id).get();
+   return member.getUsername();
+   }
+}
+
+사용후
+@RestController
+@RequiredArgsConstructor
+public class MemberController {
+
+   private final MemberRepository memberRepository;
+
+   @GetMapping("/members/{id}")
+   public String findMember(@PathVariable("id") Member member) {
+   return member.getUsername();
+   }
+}
+```
+
+- web 확장 페이징
+```
+@GetMapping("/members")
+public Page<Member> list(Pageable pageable) {
+   Page<Member> page = memberRepository.findAll(pageable);
+   return page;
+}
+
+api 요청 예)
+/members?page=0&size=3&sort=id,desc&sort=username,desc
+```
+
+- 파라미터가 아닌 글로벌 성정도 가능함 - yml 파일
+```
+spring.data.web.pageable.default-page-size=20 /# 기본 페이지 사이즈/
+spring.data.web.pageable.max-page-size=2000 /# 최대 페이지 사이즈/
+```
+
+- 엔티티를 직접적으로 넘기는 것은 매우 권장하지 않기 때문에 DTO를 활용해야함, 근데 page는 내부적으로 map을 제공하기 때문에쉬움
+```
+기존 코드
+@GetMapping("/members")
+public Page<MemberDto> list(Pageable pageable) {
+   Page<Member> page = memberRepository.findAll(pageable);
+   Page<MemberDto> pageDto = page.map(MemberDto::new);
+return pageDto;
+}
+
+map으로 최적화 된 코드
+@GetMapping("/members")
+public Page<MemberDto> list(Pageable pageable) {
+   return memberRepository.findAll(pageable).map(MemberDto::new);
+}
+```
+```

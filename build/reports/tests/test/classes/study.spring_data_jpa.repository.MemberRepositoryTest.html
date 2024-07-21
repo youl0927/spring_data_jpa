@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - MemberRepositoryTest</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>MemberRepositoryTest</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/study.spring_data_jpa.repository.html">study.spring_data_jpa.repository</a> &gt; MemberRepositoryTest</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">1</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">0.426s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div id="tabs">
+<ul class="tabLinks">
+<li>
+<a href="#tab0">Tests</a>
+</li>
+<li>
+<a href="#tab1">Standard output</a>
+</li>
+</ul>
+<div id="tab0" class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">nativeQuery()</td>
+<td class="success">0.426s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div id="tab1" class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>23:38:42.292 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [study.spring_data_jpa.repository.MemberRepositoryTest]: MemberRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+23:38:42.363 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration study.spring_data_jpa.SpringDataJpaApplication for test class study.spring_data_jpa.repository.MemberRepositoryTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.4)
+
+2024-07-21T23:38:42.581+09:00  INFO 95648 --- [    Test worker] s.s.repository.MemberRepositoryTest      : Starting MemberRepositoryTest using Java 18.0.2.1 with PID 95648 (started by jeonghoeyul in /Users/jeonghoeyul/Desktop/source/git/data_jpa)
+2024-07-21T23:38:42.582+09:00  INFO 95648 --- [    Test worker] s.s.repository.MemberRepositoryTest      : No active profile set, falling back to 1 default profile: &quot;default&quot;
+2024-07-21T23:38:42.900+09:00  INFO 95648 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-07-21T23:38:42.939+09:00  INFO 95648 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 34 ms. Found 3 JPA repository interfaces.
+2024-07-21T23:38:43.176+09:00  INFO 95648 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-07-21T23:38:43.204+09:00  INFO 95648 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-07-21T23:38:43.222+09:00  INFO 95648 --- [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-07-21T23:38:43.345+09:00  INFO 95648 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-07-21T23:38:43.360+09:00  INFO 95648 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-07-21T23:38:43.415+09:00  INFO 95648 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:tcp://localhost/~/jpashop user=SA
+2024-07-21T23:38:43.416+09:00  INFO 95648 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-07-21T23:38:43.970+09:00  INFO 95648 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-07-21T23:38:44.114+09:00 DEBUG 95648 --- [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists item cascade 
+2024-07-21T23:38:44.117+09:00 DEBUG 95648 --- [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists member cascade 
+2024-07-21T23:38:44.117+09:00 DEBUG 95648 --- [    Test worker] org.hibernate.SQL                        : 
+    drop table if exists team cascade 
+2024-07-21T23:38:44.118+09:00 DEBUG 95648 --- [    Test worker] org.hibernate.SQL                        : 
+    drop sequence if exists member_seq
+2024-07-21T23:38:44.119+09:00 DEBUG 95648 --- [    Test worker] org.hibernate.SQL                        : 
+    drop sequence if exists team_seq
+2024-07-21T23:38:44.122+09:00 DEBUG 95648 --- [    Test worker] org.hibernate.SQL                        : 
+    create sequence member_seq start with 1 increment by 50
+2024-07-21T23:38:44.123+09:00 DEBUG 95648 --- [    Test worker] org.hibernate.SQL                        : 
+    create sequence team_seq start with 1 increment by 50
+2024-07-21T23:38:44.124+09:00 DEBUG 95648 --- [    Test worker] org.hibernate.SQL                        : 
+    create table item (
+        created_date timestamp(6),
+        id varchar(255) not null,
+        primary key (id)
+    )
+2024-07-21T23:38:44.126+09:00 DEBUG 95648 --- [    Test worker] org.hibernate.SQL                        : 
+    create table member (
+        age integer not null,
+        created_date timestamp(6),
+        last_modified_date timestamp(6),
+        member_id bigint not null,
+        team_id bigint,
+        creatd_by varchar(255),
+        last_modified_by varchar(255),
+        username varchar(255),
+        primary key (member_id)
+    )
+2024-07-21T23:38:44.126+09:00 DEBUG 95648 --- [    Test worker] org.hibernate.SQL                        : 
+    create table team (
+        create_date timestamp(6),
+        team_id bigint not null,
+        update_date timestamp(6),
+        name varchar(255),
+        primary key (team_id)
+    )
+2024-07-21T23:38:44.127+09:00 DEBUG 95648 --- [    Test worker] org.hibernate.SQL                        : 
+    alter table if exists member 
+       add constraint FKcjte2jn9pvo9ud2hyfgwcja0k 
+       foreign key (team_id) 
+       references team
+2024-07-21T23:38:44.131+09:00  INFO 95648 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-07-21T23:38:44.338+09:00  INFO 95648 --- [    Test worker] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-07-21T23:38:44.726+09:00  WARN 95648 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-07-21T23:38:44.949+09:00  INFO 95648 --- [    Test worker] s.s.repository.MemberRepositoryTest      : Started MemberRepositoryTest in 2.514 seconds (process running for 3.17)
+2024-07-21T23:38:45.300+09:00 DEBUG 95648 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        next value for team_seq
+2024-07-21T23:38:45.312+09:00 DEBUG 95648 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        next value for member_seq
+2024-07-21T23:38:45.326+09:00 DEBUG 95648 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        next value for member_seq
+2024-07-21T23:38:45.334+09:00 DEBUG 95648 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        team
+        (create_date, name, update_date, team_id) 
+    values
+        (?, ?, ?, ?)
+2024-07-21T23:38:45.337+09:00 DEBUG 95648 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        member
+        (age, creatd_by, created_date, last_modified_by, last_modified_date, team_id, username, member_id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?)
+2024-07-21T23:38:45.337+09:00 DEBUG 95648 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        member
+        (age, creatd_by, created_date, last_modified_by, last_modified_date, team_id, username, member_id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?)
+2024-07-21T23:38:45.364+09:00 DEBUG 95648 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        m.member_id as id,
+        m.username,
+        t.name as teamNAme 
+    from
+        member m 
+    left join
+        team t 
+    fetch
+        first ? rows only
+memberProjection= m1
+memberProjection= teamA
+memberProjection= m2
+memberProjection= teamA
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="http://www.gradle.org">Gradle 8.8</a> at 2024. 7. 21. 오후 11:38:45</p>
+</div>
+</div>
+</body>
+</html>

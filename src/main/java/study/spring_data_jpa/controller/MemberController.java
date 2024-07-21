@@ -35,12 +35,12 @@ public class MemberController {
                 .map(MemberDto::new);
     }
 
-    @PostConstruct      // 스프링이 올라올때 한번 무조건 실행되는 어노테이션
-    public void init(){
+//    @PostConstruct      // 스프링이 올라올때 한번 무조건 실행되는 어노테이션
+//    public void init(){
 //        memberRepository.save(new Member("userA"));
-
-        for (int i = 0; i < 100; i++){
-            memberRepository.save(new Member("user" + i, i));
-        }
-    }
+//
+//        for (int i = 0; i < 100; i++){
+//            memberRepository.save(new Member("user" + i, i));
+//        }
+//    }
 }

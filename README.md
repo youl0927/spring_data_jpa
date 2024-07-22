@@ -507,3 +507,138 @@ public Page<MemberDto> list(Pageable pageable) {
 }
 ```
 ```
+### 20240722
+- Query By Example
+```
+@SpringBootTest
+@Transactional
+public class QueryByExampleTest {
+   @Autowired MemberRepository memberRepository;
+   @Autowired EntityManager em;
+   @Test
+   public void basic() throws Exception {
+      //given
+      Team teamA = new Team("teamA");
+      em.persist(teamA);
+      em.persist(new Member("m1", 0, teamA));
+      em.persist(new Member("m2", 0, teamA));
+      em.flush();
+      
+      //when
+      //Probe 생성
+      Member member = new Member("m1");
+      Team team = new Team("teamA"); //내부조인으로 teamA 가능
+      member.setTeam(team);
+      //ExampleMatcher 생성, age 프로퍼티는 무시
+      ExampleMatcher matcher = ExampleMatcher.matching()
+      .withIgnorePaths("age");
+      Example<Member> example = Example.of(member, matcher);
+      List<Member> result = memberRepository.findAll(example);
+      
+      //then
+      assertThat(result.size()).isEqualTo(1);
+   }
+}
+```
+- 실무에서 잘 안씀
+
+---
+
+- Projection
+   - 실무에서 그나마 조금 쓴다
+   - 모든 엔티티가 아닌 변수 하나만 가져오고 싶을때 많이 사용한다고 함
+```
+public interface UsernameOnly {
+   String getUsername();
+}
+```
+
+```
+public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom, JpaSpecificationExecutor {
+   List<UsernameOnly> findProjectionsByUsername(String username);
+}
+```
+
+```
+@Test
+public void projections() throws Exception {
+   //given
+   Team teamA = new Team("teamA");
+   em.persist(teamA);
+   Member m1 = new Member("m1", 0, teamA);
+   Member m2 = new Member("m2", 0, teamA);
+   em.persist(m1);
+   em.persist(m2);
+   em.flush();
+   em.clear();
+
+   //when
+   List<UsernameOnly> result =
+   memberRepository.findProjectionsByUsername("m1");
+
+   //then
+   Assertions.assertThat(result.size()).isEqualTo(1);
+}
+```
+
+- MemberRepository에서 Projection 기반의 인터페이스를 상속한 뒤, 인터페이스 추가 후 사용하면됨
+   - 네이밍 할대 find...ByUsername 이런식으로 규칙을 지켜 주면 된다.
+
+```
+public interface UsernameOnly {
+   @Value("#{target.username + ' ' + target.age + ' ' + target.team.name}")
+   String getUsername();
+}
+```
+- 이런식으로 Open Projection 문법도 지원한다.
+
+---
+- 클래스 기반 Projection
+   - 인터페이스 기반을 Class 기반으로 바뀜, 장잠은 Dto를 활용할 수 있음
+```
+public class UsernameOnlyDto {
+private final String username;
+   public UsernameOnlyDto(String username) {
+      this.username = username;
+   }
+   
+   public String getUsername() {
+      return username;
+   }
+}
+```
+
+- 동적 Projections
+```
+<T> List<T> findProjectionsByUsername(String username, Class<T> type);
+
+List<UsernameOnly> result = memberRepository.findProjectionsByUsername("m1", UsernameOnly.class);
+```
+
+- 중첩 구조 처리
+```
+public interface NestedClosedProjection {
+   String getUsername();
+   TeamInfo getTeam();
+   interface TeamInfo {
+   String getName();
+   }
+}
+```
+---
+- 네이티브 쿼리
+   - 자주 사용되지는 않지만, 동적쿼리가 아닌, 어쩔수 없을때 사용해야됨
+   - 페이징도 가능함
+```
+public interface MemberRepository extends JpaRepository<Member, Long> {
+   @Query(value = "select * from member where username = ?", nativeQuery =true)
+   Member findByNativeQuery(String username);
+}
+```
+- Projections을 활용해서 Dto에 담을 수도 있음
+```
+@Query(value = "SELECT m.member_id as id, m.username, t.name as teamName FROM member m left join team t ON m.team_id = t.team_id",
+      countQuery = "SELECT count(*) from member",
+      nativeQuery = true)
+Page<MemberProjection> findByNativeProjection(Pageable pageable);
+```

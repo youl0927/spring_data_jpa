@@ -523,7 +523,6 @@ public class QueryByExampleTest {
       em.persist(new Member("m1", 0, teamA));
       em.persist(new Member("m2", 0, teamA));
       em.flush();
-      
       //when
       //Probe 생성
       Member member = new Member("m1");
@@ -534,7 +533,6 @@ public class QueryByExampleTest {
       .withIgnorePaths("age");
       Example<Member> example = Example.of(member, matcher);
       List<Member> result = memberRepository.findAll(example);
-      
       //then
       assertThat(result.size()).isEqualTo(1);
    }
